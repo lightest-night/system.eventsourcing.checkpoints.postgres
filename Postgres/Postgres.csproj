@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <AssemblyName>LightestNight.System.EventSourcing.Checkpoints.Postgres</AssemblyName>
+        <RootNamespace>LightestNight.System.EventSourcing.Checkpoints.Postgres</RootNamespace>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>LightestNight.System.EventSourcing.Checkpoints.Postgres</PackageId>
+        <Authors>James Woodley</Authors>
+        <Company>LightestNight Ltd</Company>
+        <Title>LightestNight :: System :: Event Sourcing :: Checkpoints :: Postgres</Title>
+        <Description>The elements required to manage a Stream checkpoint inside a Postgres data store</Description>
+        <PackageTags>lightestnight;system;infrastructure;event;event sourcing;domain driven design;cqrs;checkpoints;postgres</PackageTags>
+        <Version>1.0.0</Version>
+        <PackageVersion>1.0.0</PackageVersion>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <InformationalVersion>1.0.0</InformationalVersion>
+        <PackageIcon>icon.jpeg</PackageIcon>
+        <RepositoryUrl>https://github.com/lightestnight/system.eventsourcing.checkpoints.postgres</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LightestNight.System.Data.Postgres" Version="1.0.0" />
+      <PackageReference Include="LightestNight.System.EventSourcing" Version="1.9.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Scripts\CreateSchema.sql" />
+      <EmbeddedResource Include="Scripts\CreateSchema.sql" />
+      <None Remove="Scripts\GetCheckpoint.sql" />
+      <EmbeddedResource Include="Scripts\GetCheckpoint.sql" />
+      <None Remove="Scripts\SetCheckpoint.sql" />
+      <EmbeddedResource Include="Scripts\SetCheckpoint.sql" />
+      <None Remove="Scripts\DeleteCheckpoint.sql" />
+      <EmbeddedResource Include="Scripts\DeleteCheckpoint.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\icon.jpeg">
+            <Pack>True</Pack>
+            <PackagePath></PackagePath>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    </ItemGroup>
+
+</Project>

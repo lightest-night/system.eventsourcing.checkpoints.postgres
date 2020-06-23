@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - feature/**
+      - hotfix/**
+
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build, run tests and package artifacts
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_HOST: postgres
+          POSTGRES_PORT: 5432
+          POSTGRES_POOLING: false
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DATABASE: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: dotnet build -c Release
+      - name: Unit Test
+        run: dotnet test -c Release --no-build --filter Category!=Integration
+      - name: Integration Test
+        run: dotnet test -c Release --no-build --filter Category=Integration
