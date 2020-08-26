@@ -9,10 +9,10 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres
     public class PostgresCheckpointManager : ICheckpointManager
     {
         private readonly Func<NpgsqlConnection> _createConnection;
-        private readonly PostgresCheckpointOptions _options;
+        private readonly PostgresOptions _options;
         private readonly Scripts.Scripts _scripts;
 
-        public PostgresCheckpointManager(PostgresCheckpointOptions options, IPostgresConnection connection)
+        public PostgresCheckpointManager(PostgresOptions options, IPostgresConnection connection)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _scripts = new Scripts.Scripts(_options.Schema);

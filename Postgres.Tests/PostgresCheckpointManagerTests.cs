@@ -12,7 +12,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
     public class PostgresCheckpointManagerTests
     {
         private readonly IPostgresConnection _connection;
-        private readonly PostgresCheckpointOptions _options;
+        private readonly PostgresOptions _options;
         private readonly ICheckpointManager _sut;
 
         private const string CheckpointName = "Test Checkpoint";
@@ -21,7 +21,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
         public PostgresCheckpointManagerTests()
         {
             var fixture = new Fixture();
-            _options = fixture.Build<PostgresCheckpointOptions>()
+            _options = fixture.Build<PostgresOptions>()
                 .Without(o => o.Host)
                 .Without(o => o.Port)
                 .Without(o => o.Database)
