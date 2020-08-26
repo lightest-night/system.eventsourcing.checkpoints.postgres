@@ -1,27 +1,23 @@
 ﻿using System;
 using LightestNight.System.Data.Postgres;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace LightestNight.System.EventSourcing.Checkpoints.Postgres
 {
     public static class ExtendsServiceCollection
     {
         public static IServiceCollection AddPostgresCheckpointManagement(this IServiceCollection services,
-            Action<PostgresCheckpointOptions>? optionsAccessor = null)
+            Action<PostgresCheckpointOptions>? options = null)
         {
-            services.Configure(optionsAccessor);
+            var postgresOptions = new PostgresCheckpointOptions();
+            options?.Invoke(postgresOptions);
 
-            var serviceProvider = services.BuildServiceProvider();
-            var postgresOptions = serviceProvider.GetRequiredService<IOptions<PostgresCheckpointOptions>>().Value;
-            var postgresConnection = new PostgresConnection(Options.Create(postgresOptions));
-
-            if (!(serviceProvider.GetService<ICheckpointManager>() is PostgresCheckpointManager))
-                services.AddTransient<ICheckpointManager>(sp =>
-                    new PostgresCheckpointManager(sp.GetRequiredService<IOptions<PostgresCheckpointOptions>>(),
-                        sp.GetRequiredService<ILogger<PostgresCheckpointManager>>(), postgresConnection));
-
+            // ReSharper disable once RedundantAssignment
+            services.AddPostgresData(dataOptions => dataOptions = postgresOptions)
+                .TryAddSingleton<ICheckpointManager>(sp =>
+                    new PostgresCheckpointManager(postgresOptions, sp.GetRequiredService<IPostgresConnection>()));
+            
             return services;
         }
     }

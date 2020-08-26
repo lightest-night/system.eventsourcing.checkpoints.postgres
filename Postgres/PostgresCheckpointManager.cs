@@ -2,9 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using LightestNight.System.Data.Postgres;
-using LightestNight.System.Utilities.Extensions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace LightestNight.System.EventSourcing.Checkpoints.Postgres
@@ -14,13 +11,10 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres
         private readonly Func<NpgsqlConnection> _createConnection;
         private readonly PostgresCheckpointOptions _options;
         private readonly Scripts.Scripts _scripts;
-        private readonly ILogger<PostgresCheckpointManager> _logger;
 
-        public PostgresCheckpointManager(IOptions<PostgresCheckpointOptions> options,
-            ILogger<PostgresCheckpointManager> logger, IPostgresConnection connection)
+        public PostgresCheckpointManager(PostgresCheckpointOptions options, IPostgresConnection connection)
         {
-            _options = options.ThrowIfNull(nameof(options)).Value;
-            _logger = logger.ThrowIfNull(nameof(logger));
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _scripts = new Scripts.Scripts(_options.Schema);
 
             _createConnection = connection.Build;

@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using LightestNight.System.Data.Postgres;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Npgsql;
 using Shouldly;
 using Xunit;
@@ -43,14 +41,12 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
                 })
                 .Create();
 
-            var postgresOptions = Options.Create(_options);
-            _connection = new PostgresConnection(postgresOptions);
+            _connection = new PostgresConnection(_options);
             
-            _sut = new PostgresCheckpointManager(postgresOptions, new NullLogger<PostgresCheckpointManager>(),
-                _connection);
+            _sut = new PostgresCheckpointManager(_options, _connection);
         }
 
-        [Fact]
+        [Fact, Trait("Category", "Integration")]
         public async Task ShouldCreateSchema()
         {
             // Assert
@@ -63,7 +59,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
             (await command.ExecuteScalarAsync().ConfigureAwait(false) as bool? ?? false).ShouldBeTrue();
         }
 
-        [Fact]
+        [Fact, Trait("Category", "Unit")]
         public void ShouldThrowIfCancellationRequestedWhenSettingCheckpoint()
         {
             // Arrange
@@ -76,7 +72,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
                 await _sut.SetCheckpoint(CheckpointName, Checkpoint, token).ConfigureAwait(false));
         }
 
-        [Fact]
+        [Fact, Trait("Category", "Integration")]
         public async Task ShouldSetCheckpoint()
         {
             // Act
@@ -92,7 +88,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
             (await command.ExecuteScalarAsync().ConfigureAwait(false) as long? ?? 0).ShouldBe(Checkpoint);
         }
         
-        [Fact]
+        [Fact, Trait("Category", "Unit")]
         public void ShouldThrowIfCancellationRequestedWhenGettingCheckpoint()
         {
             // Arrange
@@ -105,7 +101,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
                 await _sut.GetCheckpoint(CheckpointName, token).ConfigureAwait(false));
         }
 
-        [Fact]
+        [Fact, Trait("Category", "Integration")]
         public async Task ShouldGetCheckpoint()
         {
             // Arrange
@@ -125,7 +121,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
             result.ShouldBe(Checkpoint);
         }
 
-        [Fact]
+        [Fact, Trait("Category", "Unit")]
         public void ShouldThrowIfCancellationRequestedWhenClearingCheckpoint()
         {
             // Arrange
@@ -138,7 +134,7 @@ namespace LightestNight.System.EventSourcing.Checkpoints.Postgres.Tests
                 await _sut.ClearCheckpoint(CheckpointName, token).ConfigureAwait(false));
         }
         
-        [Fact]
+        [Fact, Trait("Category", "Integration")]
         public async Task ShouldClearCheckpoint()
         {
             // Arrange

@@ -35,8 +35,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="LightestNight.System.Data.Postgres" Version="1.0.0" />
-      <PackageReference Include="LightestNight.System.EventSourcing" Version="1.9.0" />
+      <PackageReference Include="LightestNight.System.Data.Postgres" Version="1.1.0" />
+      <PackageReference Include="LightestNight.System.EventSourcing" Version="3.2.0" />
     </ItemGroup>
 
     <ItemGroup>
